@@ -22,8 +22,8 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 from models.common import DetectMultiBackend
 from utils.augmentations import classify_transforms
 from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages
-from utils.general import LOGGER, Profile, check_file, check_requirements, colorstr, increment_path, print_args
-from utils.torch_utils import select_device, smart_inference_mode
+from utils.general import LOGGER, check_file, check_requirements, colorstr, increment_path, print_args
+from utils.torch_utils import select_device, smart_inference_mode, time_sync
 
 
 @smart_inference_mode()
@@ -44,7 +44,7 @@ def run(
     if is_url and is_file:
         source = check_file(source)  # download
 
-    dt = Profile(), Profile(), Profile()
+    seen, dt = 1, [0.0, 0.0, 0.0]
     device = select_device(device)
 
     # Directories
@@ -55,27 +55,30 @@ def run(
     model = DetectMultiBackend(weights, device=device, dnn=dnn, fp16=half)
     model.warmup(imgsz=(1, 3, imgsz, imgsz))  # warmup
     dataset = LoadImages(source, img_size=imgsz, transforms=classify_transforms(imgsz))
-    for seen, (path, im, im0s, vid_cap, s) in enumerate(dataset):
+    for path, im, im0s, vid_cap, s in dataset:
         # Image
-        with dt[0]:
-            im = im.unsqueeze(0).to(device)
-            im = im.half() if model.fp16 else im.float()
+        t1 = time_sync()
+        im = im.unsqueeze(0).to(device)
+        im = im.half() if model.fp16 else im.float()
+        t2 = time_sync()
+        dt[0] += t2 - t1
 
         # Inference
-        with dt[1]:
-            results = model(im)
+        results = model(im)
+        t3 = time_sync()
+        dt[1] += t3 - t2
 
         # Post-process
-        with dt[2]:
-            p = F.softmax(results, dim=1)  # probabilities
-            i = p.argsort(1, descending=True)[:, :5].squeeze().tolist()  # top 5 indices
-            # if save:
-            #    imshow_cls(im, f=save_dir / Path(path).name, verbose=True)
-            LOGGER.info(
-                f"{s}{imgsz}x{imgsz} {', '.join(f'{model.names[j]} {p[0, j]:.2f}' for j in i)}, {dt[1].dt * 1E3:.1f}ms")
+        p = F.softmax(results, dim=1)  # probabilities
+        i = p.argsort(1, descending=True)[:, :5].squeeze().tolist()  # top 5 indices
+        dt[2] += time_sync() - t3
+        # if save:
+        #    imshow_cls(im, f=save_dir / Path(path).name, verbose=True)
+        seen += 1
+        LOGGER.info(f"{s}{imgsz}x{imgsz} {', '.join(f'{model.names[j]} {p[0, j]:.2f}' for j in i)}")
 
     # Print results
-    t = tuple(x.t / (seen + 1) * 1E3 for x in dt)  # speeds per image
+    t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
     shape = (1, 3, imgsz, imgsz)
     LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms post-process per image at shape {shape}' % t)
     LOGGER.info(f"Results saved to {colorstr('bold', save_dir)}")

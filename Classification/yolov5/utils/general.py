@@ -141,26 +141,16 @@ CONFIG_DIR = user_config_dir()  # Ultralytics settings dir
 
 
 class Profile(contextlib.ContextDecorator):
-    # YOLOv5 Profile class. Usage: @Profile() decorator or 'with Profile():' context manager
-    def __init__(self, t=0.0):
-        self.t = t
-        self.cuda = torch.cuda.is_available()
-
+    # Usage: @Profile() decorator or 'with Profile():' context manager
     def __enter__(self):
-        self.start = self.time()
+        self.start = time.time()
 
     def __exit__(self, type, value, traceback):
-        self.dt = self.time() - self.start  # delta-time
-        self.t += self.dt  # accumulate dt
-
-    def time(self):
-        if self.cuda:
-            torch.cuda.synchronize()
-        return time.time()
+        print(f'Profile results: {time.time() - self.start:.5f}s')
 
 
 class Timeout(contextlib.ContextDecorator):
-    # YOLOv5 Timeout class. Usage: @Timeout(seconds) decorator or 'with Timeout(seconds):' context manager
+    # Usage: @Timeout(seconds) decorator or 'with Timeout(seconds):' context manager
     def __init__(self, seconds, *, timeout_msg='', suppress_timeout_errors=True):
         self.seconds = int(seconds)
         self.timeout_message = timeout_msg
