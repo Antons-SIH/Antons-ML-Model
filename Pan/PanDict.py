@@ -117,9 +117,9 @@ class PanDict:
         return Dict
 
 
-if __name__ == '__main__':
-    obj=PanDict("/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/yolov5","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/best.pt","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/Dump","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/SampleImages/Pan/6.jpeg")
-    print(obj.getPanDict())
+# if __name__ == '__main__':
+#     obj=PanDict("/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/yolov5","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/best.pt","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/Dump","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/SampleImages/Pan/6.jpeg")
+#     print(obj.getPanDict())
 
 
 

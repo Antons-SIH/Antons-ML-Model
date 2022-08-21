@@ -9,6 +9,6 @@ def getAadharDictionary(path):
     return Dict
 
 #use for testing the final code
-if __name__ == '__main__':
-    Dict= getAadharDictionary("/Users/aditya_gitte/Projects/SIH/Machine_Learning/SampleFiles/Ath_aadharCard.jpeg")
-    print(Dict)
+# if __name__ == '__main__':
+#     Dict= getAadharDictionary("/Users/aditya_gitte/Projects/SIH/Machine_Learning/SampleFiles/Ath_aadharCard.jpeg")
+#     print(Dict)
