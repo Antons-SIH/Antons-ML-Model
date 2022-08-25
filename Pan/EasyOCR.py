@@ -14,7 +14,7 @@ def getOCRText(path):
     for item in Bounds:
         finalList.append(item[1])
     if len(finalList)==0:
-        return "Nothing"
+        return "NA"
     else:
         str=finalList[0].strip()
         return str

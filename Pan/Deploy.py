@@ -130,7 +130,7 @@ def main(img_path=None):
 
 
 # clearDump(dumpPath)
-main(img_path="/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/SampleImages/Pan/6.jpeg")
+main(img_path="/SampleImages/Pan/Uncropped/titksha.jpeg")
 # print(panName)
 # print(panNumber)
 # print(dob)
@@ -138,6 +138,6 @@ Dict = {1: panNumber, 2: panName, 3: dob}
 print(Dict)
 def getPanDict(path):
     clearDump(dumpPath)
-    main(img_path="/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/SampleImages/Pan/6.jpeg")
+    main(img_path="/SampleImages/Pan/Uncropped/titksha.jpeg")
     global Dict
     Dict = {1: panNumber, 2: panName, 3: dob}

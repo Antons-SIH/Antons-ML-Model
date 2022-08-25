@@ -52,7 +52,7 @@ class PanDict:
         # separate coordinates from box
         xmin, ymin, xmax, ymax = coords
         # get the subimage that makes up the bounded region and take an additional 2 pixels in the x direction
-        nplate = img[int(ymin):int(ymax), int(xmin) - 2:int(xmax) + 2]
+        nplate = img[int(ymin)-1:int(ymax)+1, int(xmin) - 3:int(xmax) + 3]
         global panNumber
         global panName
         global dob
@@ -113,13 +113,13 @@ class PanDict:
         self.clearDump()
         self.generatePandict()
         Dict = {0: self.panNumber, 1: self.panName, 2: self.dob}
-        self.clearDump()
+        # self.clearDump()
         return Dict
 
 
-# if __name__ == '__main__':
-#     obj=PanDict("/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/yolov5","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/best.pt","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/Dump","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/SampleImages/Pan/6.jpeg")
-#     print(obj.getPanDict())
+if __name__ == '__main__':
+    obj=PanDict("/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/yolov5","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/best.pt","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/Pan/Dump","/Users/aditya_gitte/Projects/SIH/Antons-ML-Model/SampleImages/Pan/5.jpeg")
+    print(obj.getPanDict())
 
 
 

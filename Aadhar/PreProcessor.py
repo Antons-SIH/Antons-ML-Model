@@ -8,6 +8,7 @@ def isEnglish(str):
     return str.isascii()
 
 
+#function that reads the aadhar card and converts the text into list of strings a
 def getOCRListCoordinates(path):
     im = PIL.Image.open(path)
 
@@ -25,7 +26,7 @@ def getOCRListCoordinates(path):
 
 
 # Use this function to remove any non english words from the image, this function alters the original image
-def removeMarathiWordsfromImage(path):
+def removeMarathiWordsfromImage(path,path2):
     dataList,coordinatesList=getOCRListCoordinates(path)
     
     # print(dataList)
@@ -49,4 +50,4 @@ def removeMarathiWordsfromImage(path):
                     pixels[x,y]=(255,255,255)
     #testing
     # image.show()
-    image.save(path)
+    image.save(path2)
